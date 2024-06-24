@@ -1,0 +1,5 @@
+data_ingestion:
+  download_url: https://www.kaggle.com/datasets/alessiocorrado99/animals10
+  local_data_file: data/
+  images_loc: data/animals10/raw-img/
+
