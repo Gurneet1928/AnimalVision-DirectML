@@ -3,3 +3,10 @@ data_ingestion:
   local_data_file: data/
   images_loc: data/animals10/raw-img/
 
+model_training_config:
+  device: dml
+  learning_rate: 0.01
+  momentum: 0.952
+  w_decay: 0.001
+  batch_size: 32
+

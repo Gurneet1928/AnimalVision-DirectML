@@ -4,6 +4,8 @@ from dataclasses import dataclass
 from box import ConfigBox
 import yaml
 import opendatasets as od
+from commons.common_utils import read_yaml
+from commons.constants import CONFIG_FILE_PATH
 
 @dataclass(frozen=False)         # Define Entity for Custom Data Type
 class DataIngestion:
@@ -12,14 +14,13 @@ class DataIngestion:
     images_loc: Path
 
 class DownloadDataset:
-    def __init__(self, path_to_config: Path, config: DataIngestion):
+    def __init__(self, path_to_config: Path = CONFIG_FILE_PATH):
         try:
-            self.config = config
-            with open(path_to_config, 'r') as file:
-                content = ConfigBox(yaml.safe_load(file))
-                self.config.download_url = str(content.data_ingestion.download_url)
-                self.config.local_data_file = Path(content.data_ingestion.local_data_file)
-                self.config.images_loc = Path(content.data_ingestion.images_loc)
+            self.config = DataIngestion
+            content = read_yaml(Path(path_to_config))
+            self.config.download_url = str(content.data_ingestion.download_url)
+            self.config.local_data_file = Path(content.data_ingestion.local_data_file)
+            self.config.images_loc = Path(content.data_ingestion.images_loc)
         except Exception as e: 
             print(e)
 
@@ -55,6 +56,6 @@ class DownloadDataset:
             print("Data already downloaded")
 
 random_var = DataIngestion("","","")
-obj = DownloadDataset("config.yaml",random_var)
+obj = DownloadDataset()
 obj._check_json()
 obj.download_data()
