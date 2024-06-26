@@ -105,7 +105,7 @@ But please make sure attribute the developer....
 ## Aftermath
 
 AMD Users after learning about DirectML and now they can use AMD GPUs for Deep Learning....
-![alt text](image.png)
+![alt text](ignore/lets-go-molorant.gif)
 
 
 
