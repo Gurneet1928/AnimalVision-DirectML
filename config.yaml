@@ -8,6 +8,6 @@ model_training_config:
   learning_rate: 0.01
   momentum: 0.952
   w_decay: 0.001
-  batch_size: 32
-  epochs: 5
+  batch_size: 24
+  epochs: 15
 

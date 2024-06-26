@@ -22,7 +22,7 @@ class ModelParams:
     batch_size: int
     epochs: int
 
-class ModelTrainig:
+class ModelTraining:
     def __init__(self, config_path = CONFIG_FILE_PATH):
         try:
             self.config = ModelParams
@@ -52,8 +52,8 @@ class ModelTrainig:
         image_datasets = datasets.ImageFolder(root=data_dir, transform=data_tranforms())
 
         dataset_size = len(image_datasets)
-        dataset_classes = image_datasets.classes
-        class_length = len(image_datasets.classes)
+        self.dataset_classes = image_datasets.classes
+        self.class_length = len(image_datasets.classes)
 
         train_size = int(dataset_size*val_size)
 
@@ -62,7 +62,7 @@ class ModelTrainig:
         train_set_loader = torch.utils.data.DataLoader(train_set, batch_size=self.config.batch_size, shuffle=True, num_workers=8)
         val_set_loader = torch.utils.data.DataLoader(val_set, batch_size=self.config.batch_size, shuffle=True, num_workers=8)
 
-        return dataset_classes, class_length, train_set_loader, val_set_loader
+        return self.dataset_classes, self.class_length, train_set_loader, val_set_loader
 
     def train_nn(self, model, train_loader, val_loader):
         """
@@ -85,7 +85,7 @@ class ModelTrainig:
         optimizer = optim.SGD(model.parameters(), lr=self.config.learning_rate, momentum=self.config.momentum, weight_decay=self.config.w_decay)
 
         for epoch in range(self.config.epochs):
-            print(f"Epoch {epoch}/{self.config.epochs}")
+            print(f"Epoch {epoch+1}/{self.config.epochs}")
             model.train()
             running_loss = 0.0
             running_corrects = 0
@@ -118,7 +118,7 @@ class ModelTrainig:
 
             if test_data_acc > best_acc:
                 best_acc = test_data_acc
-                save_checkpoint(model, epoch, optimizer, best_acc)
+                save_checkpoint(model, epoch, optimizer, best_acc, self.dataset_classes)
 
         print("Finished")
         return model
@@ -160,16 +160,16 @@ class ModelTrainig:
         Returns:
             None
         """
-
         chk = torch.load('best_checkpoint.pth.tar')
         print(" -- Saving the best model using best Checkpoint at Epoch {} --".format(chk['epoch']))
         model.load_state_dict(chk['model'].state_dict())
         torch.save(model, 'best_model.pth')
         print("Model saved successfully: {}".format('best_model.pth'))
 
+
 if __name__ == '__main__':
     model = models.resnet18(pretrained=True)
-    model_obj = ModelTrainig()
+    model_obj = ModelTraining()
 
     dataset_classes, class_length , train_set_loader, val_set_loader = model_obj.data_loaders(val_size = 0.8)
 

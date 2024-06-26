@@ -61,7 +61,7 @@ def set_device(device: str):
     return torch.device("cpu")
     
 
-def save_checkpoint(model, epoch, optimizer, best_acc):
+def save_checkpoint(model, epoch, optimizer, best_acc, classes):
     """
     Function to Save Model Checkpoint 
     Args:
@@ -74,6 +74,7 @@ def save_checkpoint(model, epoch, optimizer, best_acc):
         'epoch': epoch + 1,
         'model': model,
         'best_accuracy': best_acc,
-        'optimizer': optimizer.state_dict()
+        'optimizer': optimizer.state_dict(),
+        'classes': classes,
     }
     torch.save(state, 'best_checkpoint.pth.tar')
