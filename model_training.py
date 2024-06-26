@@ -9,15 +9,18 @@ from commons.constants import CONFIG_FILE_PATH
 import os
 from dataclasses import dataclass
 from pathlib import Path
+import warnings
 
-@dataclass(frozen=False)
+warnings.filterwarnings("ignore")
+
+@dataclass(frozen=False)        # Define Entity for Custom Data Type
 class ModelParams:
     device: str
     learning_rate: float
     momentum: float
     w_decay: float
     batch_size: int
-
+    epochs: int
 
 class ModelTrainig:
     def __init__(self, config_path = CONFIG_FILE_PATH):
@@ -30,6 +33,7 @@ class ModelTrainig:
             self.config.momentum = float(content.momentum)
             self.config.w_decay = float(content.w_decay)
             self.config.batch_size = int(content.batch_size)
+            self.config.epochs = int(content.epochs)
         except Exception as e:
             print(e)
 
@@ -59,9 +63,8 @@ class ModelTrainig:
         val_set_loader = torch.utils.data.DataLoader(val_set, batch_size=self.config.batch_size, shuffle=True, num_workers=8)
 
         return dataset_classes, class_length, train_set_loader, val_set_loader
-    
 
-    def train_nn(self, model, train_loader, val_loader, criterion, optimizer, n_epochs):
+    def train_nn(self, model, train_loader, val_loader):
         """
         Model Training Function
         Args:
@@ -74,11 +77,15 @@ class ModelTrainig:
         Returns:
             model: Trained Model
         """
-        device = set_device(self.config.device)
-        best_acc = 0
 
-        for epoch in range(n_epochs):
-            print(f"Epoch {epoch}/{n_epochs}")
+        device = set_device(self.config.device)
+        model = model.to(device)
+        best_acc = 0
+        loss_fn = nn.CrossEntropyLoss()
+        optimizer = optim.SGD(model.parameters(), lr=self.config.learning_rate, momentum=self.config.momentum, weight_decay=self.config.w_decay)
+
+        for epoch in range(self.config.epochs):
+            print(f"Epoch {epoch}/{self.config.epochs}")
             model.train()
             running_loss = 0.0
             running_corrects = 0
@@ -93,7 +100,7 @@ class ModelTrainig:
 
                 outputs = model(images)
                 _, preds = torch.max(outputs.data, 1)
-                loss = criterion(outputs, labels)
+                loss = loss_fn(outputs, labels)
 
                 loss.backward() # Backpropagation
 
@@ -107,7 +114,7 @@ class ModelTrainig:
 
             print(" -- Training Dataset -- Got %d out of %d images correctly. (%.3f%%). Epoch Loss: %.3f" % (running_corrects, total, epoch_acc, epoch_loss))
 
-            test_data_acc = evaluate_model_test_set(model, val_loader)
+            test_data_acc = self.evaluate_model_test_set(model, val_loader)
 
             if test_data_acc > best_acc:
                 best_acc = test_data_acc
@@ -144,6 +151,21 @@ class ModelTrainig:
         epoch_acc = 100.00 * predicted_correctly/total
         print(" -- Validating Dataset -- Got %d out of %d images correctly. (%.3f%%)" % (predicted_correctly, total, epoch_acc))
         return epoch_acc
+    
+    def save_model(self, model):
+        """
+        Save the model using checkpoints at best epoch
+        Args:
+            model: Model to be saved
+        Returns:
+            None
+        """
+
+        chk = torch.load('best_checkpoint.pth.tar')
+        print(" -- Saving the best model using best Checkpoint at Epoch {} --".format(chk['epoch']))
+        model.load_state_dict(chk['model'].state_dict())
+        torch.save(model, 'best_model.pth')
+        print("Model saved successfully: {}".format('best_model.pth'))
 
 if __name__ == '__main__':
     model = models.resnet18(pretrained=True)
@@ -155,11 +177,6 @@ if __name__ == '__main__':
     num_classes = class_length
     model.fc = nn.Linear(num_features, num_classes)
 
-    device = set_device("dml")
-    model = model.to(device)
-
-    loss_fn = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9, weight_decay=0.001)
-    n_epochs = 10
-
-    trained_model = model_obj.train_nn(model, train_set_loader, val_set_loader, loss_fn, optimizer, n_epochs)
+    trained_model = model_obj.train_nn(model, train_set_loader, val_set_loader)
+    model_obj.save_model(trained_model)
+    

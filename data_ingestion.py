@@ -5,7 +5,7 @@ from box import ConfigBox
 import yaml
 import opendatasets as od
 from commons.common_utils import read_yaml
-from commons.constants import CONFIG_FILE_PATH
+from commons.constants import CONFIG_FILE_PATH, KAGGLE_FILE_PATH
 
 @dataclass(frozen=False)         # Define Entity for Custom Data Type
 class DataIngestion:
@@ -31,7 +31,8 @@ class DownloadDataset:
             None
         Returns:
             Nothing"""
-        if not os.path.exists("kaggle.json"):
+        
+        if not os.path.exists(KAGGLE_FILE_PATH):
             raise FileNotFoundError("kaggle.json file not found in the current directory")
             
 
@@ -55,7 +56,7 @@ class DownloadDataset:
         else:
             print("Data already downloaded")
 
-random_var = DataIngestion("","","")
-obj = DownloadDataset()
-obj._check_json()
-obj.download_data()
+if __name__ == "__main__":
+    obj = DownloadDataset()
+    obj._check_json()
+    obj.download_data()

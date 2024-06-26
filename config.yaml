@@ -9,4 +9,5 @@ model_training_config:
   momentum: 0.952
   w_decay: 0.001
   batch_size: 32
+  epochs: 5
 
