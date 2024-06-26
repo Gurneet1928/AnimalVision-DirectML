@@ -49,17 +49,17 @@ Incase you face issues while installing Torch-DirectML, follow this >> [Installa
 Run the below codes after making sure you install PyTorch and Torch-DirectML properly.
 
 1. Clone the repository
-```bash
+```sh
 git clone https://github.com/Gurneet1928/AnimalVision-DirectML.git
 ```
 
 2. Install Requirements using:
-```bash
+```sh
 pip install -r requirement.txt --use-deprecated=legacy-resolver
 ```
 
 3. Run the pipeline using:
-```bash
+```sh
 python main.py
 ```
 
