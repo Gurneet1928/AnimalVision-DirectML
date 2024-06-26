@@ -21,6 +21,7 @@ class ModelParams:
     w_decay: float
     batch_size: int
     epochs: int
+    train_size: float
 
 class ModelTraining:
     def __init__(self, config_path = CONFIG_FILE_PATH):
@@ -34,16 +35,18 @@ class ModelTraining:
             self.config.w_decay = float(content.w_decay)
             self.config.batch_size = int(content.batch_size)
             self.config.epochs = int(content.epochs)
+            self.config.train_size = float(content.train_size)
         except Exception as e:
             print(e)
 
-    def data_loaders(self, val_size: float):
+    def data_loaders(self):
         """
         Create DataLoader Objects in PyTorch
         Args:
-            val_size: float (Size of the Val Set)
+            None
         Returns:
             dataset_classes: list (list of classes in the dataset)
+            class_length: int (number of classes in the dataset)
             train_set_loader: torch.utils.data.DataLoader (DataLoader object)
             val_set_loader: torch.utils.data.DataLoader (DataLoader object)
         """
@@ -55,7 +58,7 @@ class ModelTraining:
         self.dataset_classes = image_datasets.classes
         self.class_length = len(image_datasets.classes)
 
-        train_size = int(dataset_size*val_size)
+        train_size = int(dataset_size*self.config.train_size)
 
         train_set, val_set = torch.utils.data.random_split(image_datasets, (train_size, dataset_size-train_size))
 
@@ -166,17 +169,4 @@ class ModelTraining:
         torch.save(model, 'best_model.pth')
         print("Model saved successfully: {}".format('best_model.pth'))
 
-
-if __name__ == '__main__':
-    model = models.resnet18(pretrained=True)
-    model_obj = ModelTraining()
-
-    dataset_classes, class_length , train_set_loader, val_set_loader = model_obj.data_loaders(val_size = 0.8)
-
-    num_features = model.fc.in_features
-    num_classes = class_length
-    model.fc = nn.Linear(num_features, num_classes)
-
-    trained_model = model_obj.train_nn(model, train_set_loader, val_set_loader)
-    model_obj.save_model(trained_model)
     

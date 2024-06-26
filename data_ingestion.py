@@ -6,12 +6,15 @@ import yaml
 import opendatasets as od
 from commons.common_utils import read_yaml
 from commons.constants import CONFIG_FILE_PATH, KAGGLE_FILE_PATH
+from commons import logger
+
 
 @dataclass(frozen=False)         # Define Entity for Custom Data Type
 class DataIngestion:
     download_url: str
     local_data_file: Path
     images_loc: Path
+
 
 class DownloadDataset:
     def __init__(self, path_to_config: Path = CONFIG_FILE_PATH):
@@ -22,7 +25,7 @@ class DownloadDataset:
             self.config.local_data_file = Path(content.data_ingestion.local_data_file)
             self.config.images_loc = Path(content.data_ingestion.images_loc)
         except Exception as e: 
-            print(e)
+            logger.exception(e)
 
     def _check_json(self):
         """
@@ -33,7 +36,7 @@ class DownloadDataset:
             Nothing"""
         
         if not os.path.exists(KAGGLE_FILE_PATH):
-            raise FileNotFoundError("kaggle.json file not found in the current directory")
+            logger.info(">> kaggle.json file not found in the current directory")
             
 
     def download_data(self):
@@ -46,17 +49,13 @@ class DownloadDataset:
         """
         if not os.path.exists(self.config.local_data_file):
             os.makedirs(self.config.local_data_file)
-            print("Data directory created")
+            logger.info("Data directory created")
         else:
-            print("Data directory already exists")
+            logger.info("Data directory already exists")
 
         if not os.path.exists(self.config.images_loc):
             od.download_kaggle_dataset(self.config.download_url, self.config.local_data_file)
-            print("Data Downloaded Successfully")
+            logger.info("Data Downloaded Successfully")
         else:
-            print("Data already downloaded")
-
-if __name__ == "__main__":
-    obj = DownloadDataset()
-    obj._check_json()
-    obj.download_data()
+            logger.info("Data already downloaded")
+    

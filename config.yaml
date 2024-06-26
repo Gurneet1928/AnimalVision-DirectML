@@ -10,4 +10,7 @@ model_training_config:
   w_decay: 0.001
   batch_size: 24
   epochs: 15
+  train_size: 0.8
 
+model_inference_file:
+  file_path: dog.jpg
