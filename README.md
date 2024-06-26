@@ -15,14 +15,14 @@ The Animal Image Classification Project leverages PyTorch for its deep learning 
 
 ## Table of Contents
 
-1. Features
-2. Tech Stack Used
-3. Installation and Usage
-4. Result Comparision
-5. Future Improvements
-6. Development and Contributions
-7. License
-8. Aftermath
+1. [Features](#features)
+2. [Tech Stack Used](#tech-stack-used)
+3. [Installation and Usage](#installation)
+4. [Result Comparision](#result-comparison)
+5. [Future Improvements](#future-improvements)
+6. [Development and Contributions](#development-and-contributions)
+7. [License](#license)
+8. [Aftermath](#aftermath)
 
 ## Features
  - 3 Stage Pipeline, allows to execute complete code in single command (Data Ingestion -> Model Training -> Model Inference)
@@ -70,7 +70,8 @@ After Training, the best model (w/ best epoch) will be saved and used for infere
 
 ## Result Comparison
 
-...............
+Here is a graph for comparing the AMD 6500M GPU (That I have) against NVIDIA T4 (That Colab provides for Free) for reference in performance.
+[<img src="ignore\graph.png">]()
 
 ## Future Improvements
 
