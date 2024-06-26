@@ -1,0 +1,9 @@
+python-box
+pyYAML
+opendatasets~=0.1.22
+Pillow~=10.3.0
+PyYAML~=6.0.1
+PyYAML~=6.0.1
+torch~=2.1.2
+torch_directml~=0.2.2.dev240614
+torchvision~=0.16.2
