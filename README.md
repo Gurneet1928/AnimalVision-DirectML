@@ -7,8 +7,9 @@
 
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/torch?style=flat-square) ![GitHub License](https://img.shields.io/github/license/Gurneet1928/AnimalVision-DirectML?style=flat-square) ![GitHub last commit](https://img.shields.io/github/last-commit/Gurneet1928/AnimalVision-DirectML?style=flat-square) ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/Gurneet1928/AnimalVision-DirectML?style=flat-square) ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/Gurneet1928/AnimalVision-DirectML/total)
 
+(Under Development - Custom Built Nerual Network)
 
-The Animal Image Classification Project leverages PyTorch for its deep learning framework, utilizing the DirectML backend to optimize performance across various hardware AMD Devices. This project aims to accurately classify images of different animal species using a ResNet18 Model. The model is trained on Animal10 dataset and can distinguish between multiple animal classes with high accuracy. This project serves as an excellent example using AMD devices for deep learning purpose, dedicated to Windows users.
+The Animal Image Classification Project leverages PyTorch for its deep learning framework, utilizing the DirectML backend to optimize performance across various hardware AMD Devices. This project aims to accurately classify images of different animal species using a ResNet50 Model. The model is trained on Animal10 dataset and can distinguish between multiple animal classes with high accuracy. This project serves as an excellent example using AMD devices for deep learning purpose, dedicated to Windows users.
 
 
 #### The Project implements a 3 Stage Pipeline

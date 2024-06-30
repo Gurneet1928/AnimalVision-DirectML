@@ -5,6 +5,7 @@ import torch.optim as optim
 from torchvision import datasets, models, transforms
 from commons.common_utils import set_device, data_tranforms, save_checkpoint, read_yaml
 from commons.constants import CONFIG_FILE_PATH
+from commons.neuralnet import NeuralNet
 #from data_ingestion import DataIngestion
 import os
 from dataclasses import dataclass
@@ -80,8 +81,10 @@ class ModelTraining:
         Returns:
             model: Trained Model
         """
-
+        
         device = set_device(self.config.device)
+        #model = NeuralNet()
+        model = models.resnet50(pretrained=True)
         model = model.to(device)
         best_acc = 0
         loss_fn = nn.CrossEntropyLoss()
